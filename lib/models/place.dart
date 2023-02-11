@@ -1,4 +1,8 @@
+// ignore_for_file: unnecessary_this
+
 import 'dart:io';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlaceLocation {
   final double latitude;
@@ -10,6 +14,10 @@ class PlaceLocation {
     required this.longitude,
     this.address,
   });
+
+  LatLng toLatLng() {
+    return LatLng(this.latitude, this.longitude);
+  }
 }
 
 class Place {

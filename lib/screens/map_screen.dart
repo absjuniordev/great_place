@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/place.dart';
+import 'package:great_places/models/place.dart';
 
 class MapScreen extends StatefulWidget {
   final PlaceLocation initialLocation;
   final bool isReadOnly;
 
-  const MapScreen({
-    super.key,
-    this.initialLocation = const PlaceLocation(
-      latitude: 37.419857,
-      longitude: -122.078827,
-    ),
-    this.isReadOnly = false,
-  });
+  const MapScreen(
+      {this.initialLocation = const PlaceLocation(
+        latitude: 37.419857,
+        longitude: -122.078827,
+      ),
+      this.isReadOnly = false,
+      Key? key})
+      : super(key: key);
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -36,13 +36,13 @@ class _MapScreenState extends State<MapScreen> {
         actions: [
           if (!widget.isReadOnly)
             IconButton(
+              icon: const Icon(Icons.check),
               onPressed: _pickedPosition == null
                   ? null
                   : () {
                       Navigator.of(context).pop(_pickedPosition);
                     },
-              icon: const Icon(Icons.check),
-            )
+            ),
         ],
       ),
       body: GoogleMap(
@@ -54,13 +54,14 @@ class _MapScreenState extends State<MapScreen> {
           zoom: 13,
         ),
         onTap: widget.isReadOnly ? null : _selectPosition,
-        markers: _pickedPosition == null
+        markers: (_pickedPosition == null && !widget.isReadOnly)
             ? {}
             : {
                 Marker(
-                  markerId: MarkerId('p1'),
-                  position: _pickedPosition!,
-                ),
+                  markerId: const MarkerId('p1'),
+                  position:
+                      _pickedPosition ?? widget.initialLocation.toLatLng(),
+                )
               },
       ),
     );
